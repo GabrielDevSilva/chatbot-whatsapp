@@ -1,0 +1,34 @@
+version: '3'
+
+services:
+  # bot:
+  #   build:
+  #     dockerfile: Dockerfile
+  #   container_name: whatsapp_bot 
+  #   restart: always
+  #   depends_on:
+  #     - db
+  #   networks:
+  #     - whatsapp_bot_network
+  db:
+    platform: linux/x86_64
+    image: mysql:5.7
+    restart: always
+    container_name: db_whatsapp_bot
+    environment:
+      MYSQL_DATABASE: 'WhatsappBot'
+      MYSQL_PASSWORD: 'password'
+      MYSQL_ROOT_PASSWORD: 'password'
+      MYSQL_ROOT_HOST: '%'
+      max-allowed-packet: 67108864
+    ports:
+      - '3307:3306'
+    volumes:
+      - /var/lib/mysql:/var/lib/mysql
+      - ./containers/init.sql:/data/application/init.sql
+    networks:
+      - whatsapp_bot_network
+
+networks:
+  whatsapp_bot_network:
+    driver: bridge
